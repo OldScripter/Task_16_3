@@ -1,31 +1,46 @@
 #include <iostream>
 #include <sstream>
 
-int main()
+bool INPUT_ERROR = false;
+
+double GetResult(double num_1, double num_2, char operation)
 {
-    std::string buffer;
-    std::cout << "Please enter the expression <Num1><Operation><Num2>:\n";
-    std::cin >> buffer;
-    std::stringstream buf(buffer);
-
-    double num_1 = 0;
-    double num_2 = 0;
-
-    char operation;
-    buf >> num_1 >> operation >> num_2;
-
-    std::string num_1_str;
-    std::string num_2_str;
-
+    INPUT_ERROR = false;
     double result = 0;
 
     if (operation == '+') result = num_1 + num_2;
     else if (operation == '-') result = num_1 - num_2;
     else if (operation == '*') result = num_1 * num_2;
     else if (operation == '/' && num_2 != 0) result = num_1 / num_2;
-    else std::cout << "Operator error or division on zero!\n";
+    else INPUT_ERROR = true;
 
-    printf("%f", result);
+    return result;
+}
+
+int main()
+{
+    do
+    {
+        std::string buffer;
+        std::cout << "Please enter the expression <Num1><Operation><Num2> or type 'q' to exit:\n";
+        std::cin >> buffer;
+
+        if (buffer == "q") break;
+
+        std::stringstream buf(buffer);
+        double num_1 = 0;
+        double num_2 = 0;
+        char operation;
+
+        buf >> num_1 >> operation >> num_2;
+        double result = GetResult(num_1, num_2, operation);
+
+        if (!INPUT_ERROR) printf("Result: %f\n", result);
+        else std::cout << "Bad input or division on zero!\n";
+
+    } while (true);
+
+    std::cout << "Exit program\n";
 
     return 0;
 }
